@@ -1,0 +1,79 @@
+---
+title: "DATA 607 Homework 3"
+author: "James Williams"
+output:
+  html_document:
+    df_print: paged
+---
+
+#1. Using the 173 majors listed in fivethirtyeight.com’s College Majors dataset [https://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/], provide code that identifies the majors that contain either "DATA" or "STATISTICS"
+
+##Import Data
+```{r}
+library(RCurl) 
+x <- getURL("https://raw.githubusercontent.com/fivethirtyeight/data/master/college-majors/majors-list.csv") 
+college_majors <- read.csv(text = x)
+head(college_majors)
+```
+
+##Identify Majors with "DATA" or "STATISTICS"
+
+```{r}
+library(tidyverse)
+data_majors <- str_subset(college_majors$Major, "DATA")
+statistics_majors <- str_subset(college_majors$Major, "STATISTICS")
+data_majors
+statistics_majors
+```
+
+#2 Write code that transforms the data below:
+
+[1] "bell pepper"  "bilberry"     "blackberry"   "blood orange"
+
+[5] "blueberry"    "cantaloupe"   "chili pepper" "cloudberry"  
+
+[9] "elderberry"   "lime"         "lychee"       "mulberry"    
+
+[13] "olive"        "salal berry"
+
+Into a format like this:
+
+c("bell pepper", "bilberry", "blackberry", "blood orange", "blueberry", "cantaloupe", "chili pepper", "cloudberry", "elderberry", "lime", "lychee", "mulberry", "olive", "salal berry")
+
+```{r}
+fruits <- '[1] "bell pepper"  "bilberry"     "blackberry"   "blood orange"
+
+[5] "blueberry"    "cantaloupe"   "chili pepper" "cloudberry"  
+
+[9] "elderberry"   "lime"         "lychee"       "mulberry"    
+
+[13] "olive"        "salal berry"'
+
+fruits <- str_split(fruit, "  ")
+fruits <- gsub('[0-9]+', '', fruits)
+fruits
+```
+
+#3 Describe, in words, what these expressions will match:
+"(.)\1\1"  Matches words with any character two times.
+
+"(.)(.)\\2\\1" Matches words with 2 consecutive character pairs and a character pair before and after the first character pair.
+
+"(..)\1" Matches words with a character grouping; e.g. a character pair repeated.
+
+"(.).\\1.\\1" Matches words with repeated character pairs spaced by 1 character in between.
+
+"(.)(.)(.).*\\3\\2\\1" Matches words with any three character pairs repeated three times.
+
+
+#4 Construct regular expressions to match words that:
+
+Start and end with the same character: "^.*$"
+Contain a repeated pair of letters (e.g. "church" contains "ch" repeated twice.): 
+Contain one letter repeated in at least three places (e.g. "eleven" contains three "e"s.)
+
+```{r}
+str_view("racecar", "^(.)(.*)\\1$")
+str_view("church", "([A-Za-z][A-Za-z]).*\\1")
+str_view("eleven", "([A-Za-z]).*\\1.*\\1.")
+```
